@@ -1,0 +1,67 @@
+load alias
+alias -f autoroute "use post/multi/manage/autoroute"
+alias -f impacket-dcomexec "use auxiliary/scanner/smb/impacket/dcomexec"
+alias -f impacket-secretsdump "use auxiliary/scanner/smb/impacket/secretsdump"
+alias -f impacket-wmiexec "use auxiliary/scanner/smb/impacket/wmiexec"
+alias -f impacket-kerberoast "use auxiliary/gather/get_user_spns"
+
+alias -f enum-av "use post/windows/gather/enum_av_excluded"
+alias -f enable-rdp "use post/windows/manage/enable_rdp"
+alias -f enum-adusers "use post/windows/gather/enum_ad_users"
+alias -f enum-adcomputers "use post/windows/gather/enum_ad_computers"
+alias -f enum-adgroups "use post/windows/gather/enum_ad_groups"
+alias -f enum-applications "use post/windows/gather/enum_applications"
+alias -f enum-creds "use post/windows/gather/credentials/credential_collector"
+alias -f enum-domain "use post/windows/gather/enum_domain"
+alias -f enum-services "use post/windows/gather/enum_services"
+alias -f enum-exploits "use post/multi/recon/local_exploit_suggester"
+alias -f smb-enumusers-domain "use auxiliary/scanner/smb/smb_enumusers_domain"
+
+alias -f execute-assembly "use post/windows/manage/execute_dotnet_assembly"
+alias -f handler "use exploit/multi/handler"
+alias -f hashdump "use post/windows/gather/hashdump"
+# alias -f mssql-hashdump "use auxiliary/scanner/mysql/myssl_hashdump"
+# alias -f mssql-schemadump "use auxiliary/scanner/mysql/myssl_schemadump"
+# alias -f mysql-hashdump "use auxiliary/scanner/mysql/mysql_hashdump"
+# alias -f mysql-login "use auxiliary/scanner/mysql/mysql_login"
+# alias -f mysql-schemadump "use auxiliary/scanner/mysql/mysql_schemadump"
+alias -f multi-pwn "use post/windows/manage/multi_meterpreter_inject"
+alias -f persist "use exploit/windows/local/persistence_service"
+alias -f psexec "use exploit/windows/smb/psexec"
+alias -f shares "use post/windows/gather/enum_shares"
+alias -f smartdump "use post/windows/gather/smart_hashdump"
+alias -f smb-login "use auxiliary/scanner/smb/smb_login"
+alias -f upgrade "use post/multi/manage/shell_to_meterpreter"
+alias -f users "use post/windows/gather/enum_logged_on_users"
+alias -f socks "use auxiliary/server/socks_proxy" 
+# alias -f inject-shellcode "resource resource/inject.rc"
+alias -f scan-arp "use post/windows/gather/arp_scanner"
+alias -f generate_shellcode_x64_meterpreter "use payload/windows/x64/meterpreter_reverse_tcp"
+
+#alias -f meterpreter-Linux86_tcp "resource resource/meterpreterWinx64_tcp.rc"
+#alias -f meterpreter-Win86_tcp "resource resource/meterpreterWinx86_tcp.rc"
+
+###
+### Resource scripts start here
+###
+
+alias -f meterpreter-windows "resource msf-resource/meterpreter-windows.rc"
+alias -f meterpreter-linux64_tcp "resource msf/resource/meterpreterLinux64_tcp.rc"
+alias -f sharp-edr-checker "resource msf-resource/sharp_edr_checker.rc"
+alias -f seatbelt "resource msf-resource/seatbelt.rc"
+alias -f bloodhound "resource msf-resource/bloodhound.rc"
+alias -f rubeus "resource msf-resource/rubeus.rc"
+alias -f sharpup "resource msf-resource/sharpup.rc"
+alias -f deliver-meterpreter-powershell-https-payload "resource msf-resource/deliver-meterpreter-powershell-https-payload.rc"
+
+
+
+
+#alias -f winpeas-lolbas "resource post/winpeas_lolbas.rc"
+
+
+
+<ruby>
+
+sleep(1)
+</ruby>

