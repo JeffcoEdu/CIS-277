@@ -10,7 +10,7 @@ SERV_SCRIPT="$SCRIPT_DIR/qu1ckdr0p2/qu1ckdr0p2/serv.py"
 pipx install cookiecutter
 pipx runpip cookiecutter install -r "qu1ckdr0p2/qu1ckdr0p2/requirements.txt"
 
-pipx install "qu1ckdr0p2/"
+# pipx install "qu1ckdr0p2/"
 
 # Detect current shell
 CURRENT_SHELL=$(basename "$SHELL")
