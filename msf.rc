@@ -45,8 +45,10 @@ alias -f generate_shellcode_x64_meterpreter "use payload/windows/x64/meterpreter
 ### Resource scripts start here
 ###
 
-alias -f meterpreter-windows "resource msf-resource/meterpreter-windows.rc"
-alias -f meterpreter-linux64_tcp "resource msf/resource/meterpreterLinux64_tcp.rc"
+# alias -f meterpreter-windows "resource msf-resource/meterpreter-windows.rc"
+alias -f run-handlers "resource msf-resource/run_handlers.rc"
+
+# alias -f meterpreter-linux64_tcp "resource msf/resource/meterpreterLinux64_tcp.rc"
 alias -f sharp-edr-checker "resource msf-resource/sharp_edr_checker.rc"
 alias -f seatbelt "resource msf-resource/seatbelt.rc"
 alias -f bloodhound "resource msf-resource/bloodhound.rc"

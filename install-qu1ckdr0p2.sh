@@ -7,6 +7,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SERV_SCRIPT="$SCRIPT_DIR/qu1ckdr0p2/qu1ckdr0p2/serv.py"
 
 # install in pipx env
+pipx install cookiecutter
+pipx runpip cookiecutter install -r "qu1ckdr0p2/qu1ckdr0p2/requirements.txt"
+
 pipx install "qu1ckdr0p2/"
 
 # Detect current shell
@@ -48,3 +51,4 @@ case "$CURRENT_SHELL" in
 esac
 
 echo "Now you can run 'serv' from anywhere."
+echo "if you get halo errors, run: pip install --user halo --break-system-packages"

