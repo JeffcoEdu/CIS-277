@@ -3,12 +3,9 @@ CWD = Dir.pwd
 DOTNET_EXE = File.expand_path("exe/winPEASany.exe", CWD)
 
 puts DOTNET_EXE
-ARGUMENTS = '-group=user'
-TECHNIQUE = 'SELF'
 # KILL = 'true'
 # PROCESS = 'svchost.exe'
 run_single('use post/windows/manage/execute_dotnet_assembly')
-run_single("set ARGUMENTS #{ARGUMENTS}")
 run_single("set DOTNET_EXE #{DOTNET_EXE}")
 run_single("set TECHNIQUE #{TECHNIQUE}")
 # run_single("set KILL #{KILL}")

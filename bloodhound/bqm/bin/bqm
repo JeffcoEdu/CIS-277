@@ -1,0 +1,170 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'json'
+require 'net/http'
+
+def find_dataset
+  source_file = 'query-sets.json'
+  source_file_paths = ['./data', "#{__dir__}/../data", '/usr/share/bqm/data', '~/.local/share/bqm/data']
+  source_file_paths.each do |path|
+    candidate = "#{path}/#{source_file}"
+    return candidate if File.file?(candidate) && File.readable?(candidate)
+  end
+  raise IOError, "The dataset file #{source_file} does not exist or is unreadable."
+end
+
+# Merge remote sets defined in data/query-sets.json
+def merge_remote(source, verbose: false)
+  sets = get_datasets(source)
+  queries = []
+  sets.each do |s|
+    customqueries = Net::HTTP.get(URI(s))
+    data = JSON.parse(customqueries)
+    queries += data['queries']
+    puts "  [*] File merged: #{s}" if verbose
+  rescue JSON::ParserError
+    # Handle the JSON parsing error
+    puts "  [!] JSON parsing error for #{s}"
+  end
+  queries
+end
+
+# Merge local sets provided by the user
+def merge_local(sources, verbose: false)
+  queries = []
+  sources.each do |source|
+    # If it's a file parse it
+    if File.file?(source) && File.readable?(source)
+      data = json_load(source)
+      if data['queries']
+        queries += data['queries']
+      elsif data['sets']
+        queries += merge_remote(source, verbose: verbose)
+      else
+        raise KeyError, "The file #{source} is neiter a Bloodhound custom query file nor a bqm query sets file"
+      end
+      puts "  [*] File merged: #{source}" if verbose
+    # If it's a folder, retrieve all JSON files and assumes there are queries files
+    # Then recursive call for a normal file parsing
+    elsif File.directory?(source) && File.readable?(source)
+      qfiles = Dir.glob('*.json', base: source).map { |f| File.absolute_path(f, source) }
+      queries += merge_local(qfiles, verbose: verbose)
+    else
+      raise IOError, "The dataset file/directory #{source} does not exist or is unreadable."
+    end
+  end
+  queries
+end
+
+# Query class just for the sake of having custom comparison
+class BQMquery
+  attr_accessor :data
+
+  def initialize(query)
+    @data = query
+  end
+
+  def eql?(other)
+    @data['name'].eql?(other.data['name']) && @data['queryList'].eql?(other.data['queryList'])
+  end
+
+  def hash
+    @data.hash
+  end
+end
+
+def deduplicate(data)
+  data.map { |x| BQMquery.new(x) }.uniq
+end
+
+# Transform a list of raw github links to pretty github links
+# from https://raw.githubusercontent.com/namespace/project/branch/file.ext
+# to https://github.com/namespace/project/blob/branch/file.ext
+def pretty_link(lst)
+  output = []
+  lst.each do |link|
+    _protocol, _void, _host, namespace, project, branch, *path = link.split('/')
+    output << "    https://github.com/#{namespace}/#{project}/blob/#{branch}/#{path.join('/')}"
+  end
+  output
+end
+
+def get_datasets(source)
+  src = json_load(source)
+  src['sets']
+end
+
+def json_load(file)
+  # ruby 3.0+
+  begin
+    src = JSON.load_file(file)
+  rescue NoMethodError # ruby 2.7 retro-compatibility
+    src = JSON.parse(File.read(file))
+  end
+  src
+end
+
+if __FILE__ == $PROGRAM_NAME
+  source = find_dataset
+
+  require 'optparse'
+  options = {
+    'local-sets': []
+  }
+  OptionParser.new do |parser|
+    parser.banner = 'Usage: bqm [options]'
+
+    parser.on('-o', '--output-path PATH', 'Path where to store the query file')
+    parser.on('-l', '--list', 'List available datasets')
+    parser.on('-i', '--local-sets FILE,DIRECTORY,...', Array, 'Local custom queries files/directories') do |f|
+      options[:'local-sets'] += f
+    end
+    parser.on('--ignore-default', 'Ignore the default query-sets.json')
+    parser.on('-v', '--verbose', 'Display the name of the merged files/sets')
+    parser.separator ''
+    parser.separator 'Example: bqm -o ~/.config/bloodhound/customqueries.json'
+    parser.separator 'Example: bqm -o /tmp/customqueries.json -i /tmp/a.json,/home/user/folder'
+  end.parse!(into: options)
+
+  out = options[:'output-path']
+  list = options[:list]
+  if list
+    puts '[+] Available datasets:'
+    pretty_link(get_datasets(source)).each do |l|
+      puts l
+    end
+  elsif out
+    flags = {}
+    flags[:merge_actual] = false
+    if File.file?(out) && File.readable?(out)
+      puts "[+] The output path #{out} already exists"
+      puts '[?] Do you want to overwrite it? [y/n]'
+      if $stdin.gets.chomp == 'y'
+        puts '[?] What to do with the existing queries? (merge / discard) [m/d]'
+        flags[:merge_actual] = true if $stdin.gets.chomp == 'm'
+      else
+        exit
+      end
+    end
+    puts '[+] Fetching and merging datasets'
+    data = []
+    data = merge_remote(source, verbose: options[:verbose]) unless options[:'ignore-default']
+    local_set = options[:'local-sets']
+    data += merge_local(local_set, verbose: options[:verbose]) if local_set
+    if flags[:merge_actual]
+      puts '[+] Merging your existing queries'
+      data += JSON.parse(File.read(out))['queries']
+    end
+    puts '[+] Removing duplicates'
+    queries = deduplicate(data).map(&:data)
+
+    File.open(out, 'w') do |file|
+      json = JSON.pretty_generate({ 'queries' => queries })
+      file.write(json)
+    end
+    puts "[+] All queries have been merged in #{out}"
+  else
+    puts 'Help: bqm -h'
+  end
+end
