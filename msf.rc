@@ -1,9 +1,13 @@
 load alias
 alias -f autoroute "use post/multi/manage/autoroute"
 alias -f impacket-dcomexec "use auxiliary/scanner/smb/impacket/dcomexec"
-alias -f impacket-secretsdump "use auxiliary/scanner/smb/impacket/secretsdump"
+alias -f impacket-secretsdump "use auxiliary/gather/windows_secrets_dump"
 alias -f impacket-wmiexec "use auxiliary/scanner/smb/impacket/wmiexec"
 alias -f impacket-kerberoast "use auxiliary/gather/get_user_spns"
+alias -f wmiexec "exploit/windows/local/ps_wmi_exec"
+alias -f psexec "use exploit/windows/smb/psexec"
+alias -f winrmcmd "auxiliary/scanner/winrm/winrm_cmd"
+
 
 alias -f enum-av "use post/windows/gather/enum_av_excluded"
 alias -f enable-rdp "use post/windows/manage/enable_rdp"
@@ -27,10 +31,11 @@ alias -f hashdump "use post/windows/gather/hashdump"
 # alias -f mysql-schemadump "use auxiliary/scanner/mysql/mysql_schemadump"
 alias -f multi-pwn "use post/windows/manage/multi_meterpreter_inject"
 alias -f persist "use exploit/windows/local/persistence_service"
-alias -f psexec "use exploit/windows/smb/psexec"
 alias -f shares "use post/windows/gather/enum_shares"
 alias -f smartdump "use post/windows/gather/smart_hashdump"
 alias -f smb-login "use auxiliary/scanner/smb/smb_login"
+alias -f winrm-login "auxiliary/scanner/winrm/winrm_login"
+
 alias -f upgrade "use post/multi/manage/shell_to_meterpreter"
 alias -f users "use post/windows/gather/enum_logged_on_users"
 alias -f socks "use auxiliary/server/socks_proxy" 
