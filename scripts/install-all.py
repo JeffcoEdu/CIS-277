@@ -5,7 +5,7 @@ import subprocess
 import click
 
 # Directory for cloning tools
-AD_TOOLS_DIR = "./ad"
+TOOLS_DIR = os.path.expanduser("./AD_Tools")  # or any other directory you want
 
 # List of tools to install (pipx supported and non-pipx)
 TOOLS = {
@@ -18,7 +18,23 @@ TOOLS = {
     "pywhisker": "https://github.com/ShutdownRepo/pywhisker.git",
     "targetedKerberoast": "https://github.com/ShutdownRepo/targetedKerberoast.git",
     "Coercer": "https://github.com/p0dalirius/Coercer.git",
-    "certipy": "https://github.com/ly4k/Certipy.git"
+    "certipy": "https://github.com/ly4k/Certipy.git",
+    "GPOditty": "https://github.com/synacktiv/GPOddity.git",
+    "GoldenCopy": "https://github.com/Dramelac/GoldenCopy.git",
+    "dploot": "https://github.com/zblurx/dploot.git",
+    "DonPAPI": "https://github.com/login-securite/DonPAPI.git",
+    "ASRepCatcher": "https://github.com/Yaxxine7/ASRepCatcher.git", 
+    "enum4linux-ng": "https://github.com/cddmp/enum4linux-ng.git",
+    "ADcheck": "https://github.com/CobblePot59/ADcheck.git",
+    "aclpwn.py": "https://github.com/fox-it/aclpwn.py.git",
+    "abuseACL": "https://github.com/AetherBlack/abuseACL.git",
+    "wafw00f": "https://github.com/EnableSecurity/wafw00f",
+    "smbclient-ng": "https://github.com/p0dalirius/smbclient-ng.git",
+    "BloodHound.py": "https://github.com/dirkjanm/BloodHound.py.git",
+    "dirsearch": "https://github.com/maurosoria/dirsearch.git",
+    "tldr": "https://github.com/tldr-pages/tldr.git",
+    "autobloody": "https://github.com/CravateRouge/autobloody.git",
+    "pypykatz": "https://github.com/skelsec/pypykatz.git"
 
 }
 
@@ -38,7 +54,7 @@ def ensure_pipx():
 
 def clone_or_update_repo(name, url, update):
     """Clones or updates a git repository."""
-    repo_path = os.path.join(AD_TOOLS_DIR, name)
+    repo_path = os.path.join(TOOLS_DIR, name)
     
     if os.path.exists(repo_path):
         if update:
@@ -74,8 +90,8 @@ def install_tools(update_tools):
     
     ensure_pipx()
 
-    # Ensure AD_TOOLS_DIR exists
-    os.makedirs(AD_TOOLS_DIR, exist_ok=True)
+    # Ensure TOOLS_DIR exists
+    os.makedirs(TOOLS_DIR, exist_ok=True)
 
     for name, url in TOOLS.items():
         repo_path = clone_or_update_repo(name, url, update_tools)
